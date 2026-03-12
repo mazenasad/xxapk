@@ -1,27 +1,31 @@
 #!/bin/bash
 
-# --- XXAPK BUILDER PRO v300 ---
-# DEV: MAZEN | THE ULTIMATE ENGINE
+# --- XXAPK BUILDER PRO v300 [CLEAN UI] ---
+# NO MESS | AUTO-CLEAR | PRO DESIGN
 
 R='\033[1;31m'
 W='\033[1;37m'
 G='\033[1;30m'
 N='\033[0m'
 
-clear
-echo -e "${R}"
-echo "  ██╗  ██╗██╗  ██╗ █████╗ ██████╗ ██╗  ██╗"
-echo "  ╚██╗██╔╝╚██╗██╔╝██╔══██╗██╔══██╗██║ ██╔╝"
-echo "   ╚███╔╝  ╚███╔╝ ███████║██████╔╝█████╔╝ "
-echo "   ██╔██╗  ██╔██╗ ██╔══██║██╔═══╝ ██╔═██╗ "
-echo "  ██╔╝ ██╗██╔╝ ██╗██║  ██║██║     ██║  ██╗"
-echo "  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝"
-echo -e "  [+---------------------------------------+]"
-echo -e "  [  BUILDER: XXAPK PRO v3.0 | BY MAZEN    ]"
-echo -e "  [+---------------------------------------+]"
-echo -e "${N}"
+# وظيفة لمسح الشاشة وعرض اللوجو دايماً
+show_logo() {
+    clear
+    echo -e "${R}"
+    echo "  ██╗  ██╗██╗  ██╗ █████╗ ██████╗ ██╗  ██╗"
+    echo "  ╚██╗██╔╝╚██╗██╔╝██╔══██╗██╔══██╗██║ ██╔╝"
+    echo "   ╚███╔╝  ╚███╔╝ ███████║██████╔╝█████╔╝ "
+    echo "   ██╔██╗  ██╔██╗ ██╔══██║██╔═══╝ ██╔═██╗ "
+    echo "  ██╔╝ ██╗██╔╝ ██╗██║  ██║██║     ██║  ██╗"
+    echo "  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝"
+    echo -e "  [+---------------------------------------+]"
+    echo -e "  [  BUILDER: XXAPK PRO v3.0 | BY MAZEN    ]"
+    echo -e "  [+---------------------------------------+]"
+    echo -e "${N}"
+}
 
 while true; do
+    show_logo
     echo -e "${W}[1]${N} ${R}VIEW STORAGE${N}"
     echo -e "${W}[2]${N} ${R}CREATE NEW APK${N}"
     echo -e "${W}[0]${N} ${W}EXIT SYSTEM${N}"
@@ -30,13 +34,16 @@ while true; do
 
     case $opt in
         1)
-            echo -e "\n${W}--- STORAGE CONTENTS ---${N}"
+            show_logo
+            echo -e "${W}--- STORAGE CONTENTS ---${N}"
             ls -h *.apk 2>/dev/null || echo -e "${G}Empty.${N}"
             echo -e "${W}------------------------${N}"
-            read -p "Press Enter..."
+            echo -e "\n${G}Press Enter to go back...${N}"
+            read
             ;;
         2)
-            echo -en "\n${W}[?] APK NAME: ${N}"
+            show_logo
+            echo -en "${W}[?] APK NAME: ${N}"
             read apk_name
             echo -en "${W}[?] TOTAL FILES: ${N}"
             read total
@@ -54,15 +61,17 @@ while true; do
             echo -en "\n${W}[?] APP ICON PATH: ${N}"
             read icon
             
-            echo -e "\n${R}[*] COMPILING $apk_name...${N}"
-            # Simulated Professional Build
+            show_logo
+            echo -e "${R}[*] COMPILING $apk_name...${N}"
             zip -r "${apk_name}.apk" * -x "*.sh" > /dev/null 2>&1
             find . -maxdepth 1 -type f ! -name "*.sh" ! -name "*.apk" -delete
             
-            echo -e "${G}[SUCCESS] ${apk_name}.apk HAS BEEN GENERATED.${N}"
+            echo -e "${G}[SUCCESS] ${apk_name}.apk GENERATED.${N}"
+            echo -e "${W}Returning to menu in 2 seconds...${N}"
             sleep 2
             ;;
         0) 
+            clear
             echo -e "${R}SYSTEM SHUTDOWN...${N}"
             exit 
             ;;

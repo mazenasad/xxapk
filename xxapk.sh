@@ -1,15 +1,11 @@
 #!/bin/bash
+# --- XXAPK MAIN MANAGER v7.0 ---
+# STORAGE: /xxapk | MODULAR DESIGN
 
-# --- XXAPK ORGANIZED EDITION v5.5 ---
-# AUTO-SAVE TO 'output' FOLDER | BY MAZEN
+R='\033[1;31m'; G='\033[1;32m'; W='\033[1;37m'; N='\033[0m'
 
-R='\033[1;31m'
-G='\033[1;32m'
-W='\033[1;37m'
-N='\033[0m'
-
-# إنشاء فولدر المخرجات لو مش موجود
-mkdir -p output
+# إنشاء مجلد الحفظ الموحد
+mkdir -p xxapk
 
 show_logo() {
     clear
@@ -20,66 +16,45 @@ show_logo() {
     echo "   /  \    /  \    / ___ \ |  __/  | . \ "
     echo "  /_/\_\  /_/\_\  /_/   \_\|_|     |_|\_\\"
     echo -e "  [+---------------------------------------+]"
-    echo -e "  [   ALL APKS SAVED TO: /output FOLDER    ]"
+    echo -e "  [   MAIN MANAGER | STORAGE: /xxapk       ]"
     echo -e "  [+---------------------------------------+]"
     echo -e "${N}"
 }
 
 while true; do
     show_logo
-    echo -e "${W}[1]${N} ${R}OPEN APP STORE (Ready Apps)${N}"
-    echo -e "${W}[2]${N} ${R}CUSTOM BUILD (Manual)${N}"
-    echo -e "${W}[3]${N} ${G}OPEN OUTPUT FOLDER (عرض الملفات)${N}"
-    echo -e "${W}[0]${N} ${W}EXIT${N}"
-    
+    echo -e "${W}[1] OPEN APP STORE (20 Ready Apps)${N}"
+    echo -e "${W}[2] CUSTOM BUILDER (Manual)${N}"
+    echo -e "${W}[3] VIEW STORAGE (.apk Files)${N}"
+    echo -e "${W}[0] EXIT${N}"
     echo -en "\n${R}XXAPK >> ${N}"
     read opt
 
     case $opt in
         1)
-            show_logo
-            echo -e "${W}--- SELECT PRE-BUILT APP ---${N}"
-            echo -e "${R}[01] WiFi Speed Booster${N}"
-            echo -e "${R}[02] RAM Cleaner Pro${N}"
-            echo -en "\n${W}Choose App Number: ${N}"
-            read app_num
-            
-            # محاكاة بناء التطبيق الجاهز ونقله للفولدر
-            echo -e "${G}[*] Building App $app_num...${N}"
-            sleep 1
-            touch "output/App_${app_num}.apk" # تجربة إنشاء ملف
-            echo -e "${G}[DONE] Saved to: output/App_${app_num}.apk${N}"
-            sleep 2
-            ;;
-            
+            if [ -f "store.sh" ]; then
+                bash store.sh
+            else
+                echo -e "${R}[!] store.sh not found!${N}"; sleep 2
+            fi ;;
         2)
             show_logo
-            echo -en "${W}[?] APK Name: ${N}"; read apk_name
-            echo -en "${W}[?] Source Folder Path: ${N}"; read f_path
-            
-            if [ -d "$f_path" ]; then
-                echo -en "${W}[?] Icon URL: ${N}"; read img_url
-                curl -s -L "$img_url" -o "icon.png"
-                
-                # بناء التطبيق وحفظه مباشرة داخل فولدر output
-                zip -rj "output/${apk_name}.apk" "$f_path" "icon.png" > /dev/null 2>&1
-                
-                rm "icon.png"
-                echo -e "\n${G}[SUCCESS] Saved to: output/${apk_name}.apk${N}"
+            echo -en "APK Name: "; read n
+            echo -en "Source Folder: "; read p
+            if [ -d "$p" ]; then
+                zip -rj "xxapk/${n}.apk" "$p" > /dev/null 2>&1
+                echo -e "${G}[SUCCESS] Saved to xxapk/${n}.apk${N}"; sleep 2
             else
-                echo -e "${R}[!] Path not found!${N}"
-            fi
-            sleep 2
-            ;;
-            
+                echo -e "${R}Path Error!${N}"; sleep 2
+            fi ;;
         3)
             show_logo
-            echo -e "${W}--- CURRENT APKS IN OUTPUT ---${N}"
-            ls -h output/*.apk 2>/dev/null || echo -e "${R}No APKS yet.${N}"
-            echo -e "\n${G}Press Enter to return...${N}"
-            read
-            ;;
-            
-        0) exit ;;
+            echo -e "${G}Size   |   File Name${N}"
+            echo -e "${W}-----------------------------------${N}"
+            ls -lh xxapk/ | grep ".apk" | awk '{print $5 "  |  " $9}' || echo -e "${R}Empty.${N}"
+            echo -e "${W}-----------------------------------${N}"
+            echo -e "\n${G}Total: $(ls xxapk/*.apk 2>/dev/null | wc -l) files.${N}"
+            echo -e "Press Enter to go back..."; read ;;
+        0) clear; exit ;;
     esac
 done
